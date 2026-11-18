@@ -22,7 +22,7 @@
   --green-900:#0b2f20; --green-800:#11402c; --accent:#2e5e4e; --accent2:#1a5a40;
   --mint:#cfeee0; --ink:#101613; --paper:#ffffff; --soft:#f3f6f4;
   --n:1px; --glide:0s; --mbs:.2;
-  --glass:rgba(255,255,255,.72); --glass-brd:rgba(46,94,78,.14);
+  --glass:rgba(255,255,255,.52); --glass-brd:rgba(46,94,78,.32);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -47,6 +47,7 @@ img,video{display:block;max-width:100%}
 .stage.show-case .bd-plate{opacity:0}
 .frame{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;z-index:1;--m0:0px;--mt:0px;--mb:0px;--ms:0px}
 .frame.glide{transition:transform var(--glide) cubic-bezier(.65,0,.35,1)}
+.frame.d-fade{--mt:46px;--mb:36px;--ms:60px}
 .frame.d-fade.m-case{--mt:44px;--mb:34px;--ms:64px}
 .plate,.trans,.caseplate{-webkit-mask-image:linear-gradient(180deg,transparent calc(var(--o,0px) + var(--m0)),rgba(0,0,0,.35) calc(var(--o,0px) + var(--m0) + var(--mt)*.37),#000 calc(var(--o,0px) + var(--m0) + var(--mt)),#000 calc(100% - var(--ob,0px) - var(--mb)),transparent calc(100% - var(--ob,0px))),linear-gradient(90deg,transparent 0,#000 var(--ms),#000 calc(100% - var(--ms)),transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(180deg,transparent calc(var(--o,0px) + var(--m0)),rgba(0,0,0,.35) calc(var(--o,0px) + var(--m0) + var(--mt)*.37),#000 calc(var(--o,0px) + var(--m0) + var(--mt)),#000 calc(100% - var(--ob,0px) - var(--mb)),transparent calc(100% - var(--ob,0px))),linear-gradient(90deg,transparent 0,#000 var(--ms),#000 calc(100% - var(--ms)),transparent 100%);mask-composite:intersect}
 .plate,.trans,.caseplate{transition:--mt var(--glide) cubic-bezier(.65,0,.35,1),--m0 var(--glide) cubic-bezier(.65,0,.35,1),--mb var(--glide) cubic-bezier(.65,0,.35,1),--ms var(--glide) cubic-bezier(.65,0,.35,1)}
@@ -80,8 +81,13 @@ img,video{display:block;max-width:100%}
 .badge .card .row{display:flex;justify-content:space-between;align-items:flex-end;font-size:9px;font-weight:700;padding:6px 0 3px;border-bottom:1.5px dotted #333}
 .badge .card .row b{font-weight:600;text-align:right}
 .badge .card .row .em{font-size:8px;letter-spacing:-.2px}
-.badge .hit{position:absolute;left:160px;top:470px;width:262px;height:440px;pointer-events:auto;cursor:grab}
+.badge .hit{position:absolute;left:160px;top:436px;width:262px;height:474px;pointer-events:auto;cursor:grab}
 @keyframes sway{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
+/* BIG pendulum swing — triggered on hover (desktop) and tap (mobile). Replaces the gentle
+   idle sway while it runs: the card visibly turns left, then right, several times, then settles. */
+@keyframes swingBig{0%{transform:rotate(0deg)}10%{transform:rotate(-24deg)}26%{transform:rotate(20deg)}42%{transform:rotate(-15deg)}58%{transform:rotate(10deg)}72%{transform:rotate(-6deg)}85%{transform:rotate(3deg)}100%{transform:rotate(0deg)}}
+.badge.swinging{animation:swingBig 3s cubic-bezier(.36,.07,.19,.97) both!important}
+.m-badge.swinging{animation:swingBig 3s cubic-bezier(.36,.07,.19,.97) both!important}
 
 /* fixed hero UI */
 .ui{position:fixed;inset:0;z-index:20;pointer-events:none}
@@ -110,13 +116,13 @@ body.busy .hint{visibility:hidden}
 .m-only{display:none}
 
 /* ================= INSIDE: WHITE GLASS PORTFOLIO ================= */
-.portfolio{position:fixed;inset:0;z-index:30;background:#fff;color:var(--ink);font-family:'Archivo',system-ui,sans-serif;overflow-y:auto;overflow-x:hidden;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility 0s linear .55s;-webkit-overflow-scrolling:touch}
+.portfolio{position:fixed;inset:0;z-index:30;background:linear-gradient(180deg,#fcfcf9 0%,#f1f4f1 55%,#edf1ee 100%);color:var(--ink);font-family:'Archivo',system-ui,sans-serif;overflow-y:auto;overflow-x:hidden;opacity:0;visibility:hidden;transition:opacity .55s ease,visibility 0s linear .55s;-webkit-overflow-scrolling:touch}
 .portfolio.show{opacity:1;visibility:visible;transition:opacity .55s ease}
-.portfolio::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 380px at 12% -40px,rgba(46,94,78,.10),transparent 65%),radial-gradient(700px 420px at 95% 18%,rgba(46,94,78,.08),transparent 65%)}
+.portfolio::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(700px 380px at 12% -40px,rgba(46,94,78,.05),transparent 65%),radial-gradient(700px 420px at 95% 18%,rgba(46,94,78,.04),transparent 65%)}
 .p-wrap{max-width:1120px;margin:0 auto;padding:0 22px 90px;position:relative}
-.glass{background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);border:1px solid var(--glass-brd);box-shadow:0 14px 36px rgba(16,40,30,.08)}
+.glass{background:var(--glass);backdrop-filter:blur(26px) saturate(1.55);-webkit-backdrop-filter:blur(26px) saturate(1.55);border:1px solid var(--glass-brd);box-shadow:0 20px 46px rgba(16,40,30,.15),inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.35)}
 .p-head{position:sticky;top:14px;z-index:50;margin-top:14px;border-radius:16px;padding:10px 12px 10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.p-head .brand{font-family:'Fraunces',serif;font-weight:800;font-size:19px;letter-spacing:.04em;margin-right:auto}
+.p-head .brand{font-family:'Fraunces',serif;font-weight:800;font-size:23px;letter-spacing:.04em;margin-right:auto}
 .p-head nav{display:flex;gap:4px;flex-wrap:wrap}
 .p-head nav a{text-decoration:none;font-size:13.5px;font-weight:600;padding:8px 11px;border-radius:999px;color:#26332d}
 .p-head nav a:hover{background:rgba(46,94,78,.09)}
@@ -125,13 +131,13 @@ body.busy .hint{visibility:hidden}
 .btn-solid:hover{background:#244f40}
 .btn-ghost{background:rgba(255,255,255,.7);border-color:var(--glass-brd);color:var(--ink)}
 .btn-exit{background:#101613;color:#fff}
-.p-hero{padding:64px 0 10px;display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center}
-.p-kicker{font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
-.p-hero h1{font-family:'Fraunces',serif;font-weight:650;font-size:clamp(38px,5.6vw,64px);line-height:1.04;letter-spacing:-.01em;margin-top:14px}
+.p-hero{padding:64px 0 10px;display:grid;grid-template-columns:1.08fr .92fr;gap:28px;align-items:stretch}
+.p-kicker{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);background:rgba(255,255,255,.48);border:1px solid var(--glass-brd);border-radius:999px;padding:7px 14px;backdrop-filter:blur(16px) saturate(1.55);-webkit-backdrop-filter:blur(16px) saturate(1.55)}
+.p-hero h1{font-family:'Fraunces',serif;font-weight:650;font-size:clamp(42px,6vw,74px);line-height:1.04;letter-spacing:-.01em;margin-top:14px}
 .role-card{display:inline-block;margin-top:18px;background:#fffdf4;border:1px solid rgba(16,22,19,.12);box-shadow:0 16px 30px rgba(16,40,30,.12);border-radius:8px;padding:14px 22px;transform:rotate(-2deg);font-family:'Fraunces',serif;font-size:clamp(22px,3vw,32px);font-weight:800;color:var(--accent);min-width:min(420px,100%);text-align:center}
 .role-card span{display:block;transition:opacity .3s ease,transform .3s ease}
 .p-lede{margin-top:18px;font-size:16.5px;line-height:1.6;color:#3c4741;max-width:52ch}
-.p-photo{border-radius:22px;overflow:hidden;position:relative;min-height:340px;background:linear-gradient(180deg,#ececea,#f7f7f4)}
+.p-photo{border-radius:22px;overflow:hidden;position:relative;min-height:420px;background:linear-gradient(180deg,#ececea,#f7f7f4)}
 .p-photo img,.p-photo video{width:100%;height:100%;object-fit:cover;object-position:50% 0;position:absolute;inset:0}
 .p-photo .cap{position:absolute;left:12px;right:12px;bottom:12px;border-radius:12px;padding:10px 14px;font-size:12.5px;font-weight:700;letter-spacing:.06em}
 .proof{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
@@ -139,18 +145,20 @@ body.busy .hint{visibility:hidden}
 .proof .num{font-family:'Fraunces',serif;font-size:clamp(26px,3.4vw,38px);font-weight:800;color:var(--accent);line-height:1}
 .proof .lab{margin-top:8px;font-size:13px;line-height:1.45;color:#3c4741;font-weight:600}
 /* ================= SKILLS ================= */
-.skills-list{margin-top:30px;border-top:1px solid rgba(46,94,78,.18)}
-.skill-row{display:grid;grid-template-columns:52px 1fr auto;gap:6px 20px;padding:22px 4px;border-bottom:1px solid rgba(46,94,78,.18);align-items:baseline}
+.skills-list{margin-top:30px;background:var(--glass);backdrop-filter:blur(26px) saturate(1.55);-webkit-backdrop-filter:blur(26px) saturate(1.55);border:1px solid var(--glass-brd);border-radius:18px;box-shadow:0 20px 46px rgba(16,40,30,.15),inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 1px rgba(255,255,255,.35);padding:4px 22px}
+.skill-row{display:grid;grid-template-columns:52px 46px 1fr auto;gap:6px 20px;padding:22px 4px;border-bottom:1px solid rgba(46,94,78,.14);align-items:baseline}
+.skill-row:last-child{border-bottom:0}
 .skill-row .no{font-family:'Fraunces',serif;font-size:15px;font-weight:800;color:var(--accent);opacity:.65}
 .skill-row h3{font-size:19px;font-weight:700;letter-spacing:-.01em}
-.skill-row p{grid-column:2;margin-top:5px;font-size:14.5px;line-height:1.6;color:#3c4741;max-width:64ch}
+.skill-row p{grid-column:3;margin-top:5px;font-size:14.5px;line-height:1.6;color:#3c4741;max-width:64ch}
 .skill-row .lvl{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(46,94,78,.35);border-radius:999px;padding:6px 12px;white-space:nowrap}
 .tools-strip{margin-top:26px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .tools-strip .tl{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#5a665f;margin-right:4px}
 .p-sec{margin-top:74px}
-.p-sec h2{font-family:'Fraunces',serif;font-weight:650;font-size:clamp(30px,4.4vw,46px);line-height:1.08}
+.p-sec h2{font-family:'Fraunces',serif;font-weight:650;font-size:clamp(34px,4.8vw,54px);line-height:1.08}
+.p-sec h2::after{content:"";display:block;width:76px;height:3px;border-radius:2px;background:var(--accent);opacity:.65;margin-top:16px;box-shadow:0 7px 0 rgba(46,94,78,.35)}
 .p-sec .sub{margin-top:10px;color:#3c4741;font-size:15.5px;line-height:1.6;max-width:62ch}
-.doors{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px}
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
 .door{border-radius:120px 120px 18px 18px;padding:34px 16px 22px;text-align:center;cursor:pointer;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;transition:transform .25s ease,box-shadow .25s ease;font-family:inherit;color:var(--ink)}
 .door:hover{transform:translateY(-4px)}
 .door.active{outline:2px solid var(--accent);outline-offset:2px}
@@ -162,12 +170,12 @@ body.busy .hint{visibility:hidden}
 .door-panel h3{font-family:'Fraunces',serif;font-size:24px}
 .door-panel p{margin-top:8px;line-height:1.65;color:#3c4741;font-size:15px;max-width:70ch}
 .door-panel .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.chip{border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;background:rgba(46,94,78,.08);border:1px solid var(--glass-brd)}
+.chip{border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;background:rgba(255,255,255,.48);border:1px solid var(--glass-brd);backdrop-filter:blur(16px) saturate(1.55);-webkit-backdrop-filter:blur(16px) saturate(1.55)}
 /* ================= WORK GALLERIES (classic sliders) ================= */
-.gal-head .tagline{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.gal-head .tagline{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);background:rgba(255,255,255,.48);border:1px solid var(--glass-brd);border-radius:999px;padding:6px 12px;backdrop-filter:blur(16px) saturate(1.55);-webkit-backdrop-filter:blur(16px) saturate(1.55)}
 .gal-head h2{margin-top:6px}
 .gal-head .stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.gal-stage{position:relative;margin-top:22px;border-radius:20px;background:#0c120e;overflow:hidden;height:min(76vh,680px);height:min(76dvh,680px);box-shadow:0 24px 50px rgba(16,40,30,.18)}
+.gal-stage{position:relative;margin-top:22px;border-radius:20px;background:#0c120e;overflow:hidden;height:min(76vh,680px);height:min(76dvh,680px);border:1px solid rgba(16,40,30,.3);box-shadow:0 24px 50px rgba(16,40,30,.18)}
 .gal-stage img,.gal-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .gal-stage video{cursor:pointer}
 .gal-stage .wm-tag{position:absolute;right:12px;bottom:12px;z-index:3;background:rgba(255,255,255,.78);backdrop-filter:blur(8px);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:800;letter-spacing:.08em;color:#26332d;pointer-events:none}
@@ -185,18 +193,80 @@ body.busy .hint{visibility:hidden}
 .gal-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:12px;padding:0 4px}
 .gal-cap{font-size:15px;font-weight:600;color:#26332d}
 .gal-count{font-family:'Fraunces',serif;font-size:17px;font-weight:800;color:var(--accent);white-space:nowrap}
+.gal-feature{margin-top:18px;border-radius:20px;padding:26px;display:grid;grid-template-columns:300px 1fr;gap:28px;align-items:center}
+.gal-feature .shot{border-radius:16px;overflow:hidden;background:#0b0e11;border:1px solid rgba(16,22,19,.16);box-shadow:0 18px 38px rgba(16,40,30,.22)}
+.gal-feature .shot img{width:100%;height:auto}
+.gal-feature .kick{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.gal-feature .big{font-family:'Fraunces',serif;font-size:clamp(42px,5vw,60px);font-weight:800;color:var(--accent);line-height:1;margin-top:8px}
+.gal-feature h3{font-family:'Fraunces',serif;font-size:clamp(21px,2.6vw,27px);font-weight:650;margin-top:6px}
+.gal-feature p{margin-top:9px;font-size:14.5px;line-height:1.65;color:#3c4741;max-width:52ch}
+.gal-feature .mini{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+@media (max-width:820px){.gal-feature{grid-template-columns:1fr;padding:20px;gap:20px}.gal-feature .shot{max-width:340px;width:100%;margin:0 auto}}
+/* ================= MY WEBSITES — brief text + SMALL proof thumbnails only ================= */
+.web-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:22px}
+.web-card{border-radius:18px;padding:22px}
+.web-card .kick{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.web-card h3{font-family:'Fraunces',serif;font-size:clamp(21px,2.6vw,27px);font-weight:650;margin-top:7px}
+.web-card p{margin-top:8px;font-size:14.5px;line-height:1.65;color:#3c4741}
+.web-shots{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.web-shots figure{border-radius:12px;overflow:hidden;background:#fff;border:1px solid rgba(16,22,19,.14)}
+.web-shots figure img{width:100%;height:auto;display:block}
+.web-shots figcaption{padding:10px 14px;font-size:12.5px;font-weight:700;line-height:1.45;color:#3c4741}
+@media (max-width:820px){.web-card{padding:19px}}
 .gal.flash .gal-stage{animation:galFlash 1.2s ease}
 @keyframes galFlash{0%{box-shadow:0 0 0 3px var(--accent),0 24px 50px rgba(16,40,30,.18)}100%{box-shadow:0 0 0 0 transparent,0 24px 50px rgba(16,40,30,.18)}}
-.timeline{margin-top:28px;display:grid;gap:14px}
-.t-row{display:grid;grid-template-columns:110px 1fr;gap:18px;border-radius:18px;padding:22px;align-items:start}
-.t-row .yr{font-family:'Fraunces',serif;font-size:30px;font-weight:800;color:var(--accent)}
-.t-row h3{font-size:17px}
-.t-row p{margin-top:5px;font-size:14.5px;line-height:1.6;color:#3c4741}
-.wins{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+/* ================= JOURNEY — one rope, year by year ================= */
+.journey{position:relative;margin-top:38px}
+.journey .rope{position:absolute;top:4px;left:50%;width:44px;height:calc(100% - 8px);transform:translateX(-50%);z-index:0;pointer-events:none}
+.j-stop{position:relative;z-index:1;display:grid;grid-template-columns:1fr 92px 1fr;align-items:start;margin-top:26px}
+.j-stop:first-of-type{margin-top:0}
+.j-card{border-radius:18px;padding:22px}
+.j-stop.flip .j-card{grid-column:3}
+.j-card .yr{font-family:'Fraunces',serif;font-size:clamp(30px,3.6vw,42px);font-weight:800;color:var(--accent);line-height:1}
+.j-card h3{font-family:'Fraunces',serif;font-size:20px;font-weight:650;margin-top:8px;letter-spacing:0;line-height:1.25}
+.j-card p{margin-top:7px;font-size:14.5px;line-height:1.65;color:#3c4741}
+.j-card ul{list-style:none;margin-top:12px;display:grid;gap:7px}
+.j-card li{position:relative;font-size:13.5px;line-height:1.5;color:#26332d;font-weight:600;padding-left:17px}
+.j-card li::before{content:"";position:absolute;left:0;top:.52em;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.j-card .res{display:inline-block;margin-top:14px;font-family:'Fraunces',serif;font-weight:800;font-size:15.5px;color:var(--accent);background:rgba(255,255,255,.48);border:1px solid var(--glass-brd);border-radius:999px;padding:7px 14px;backdrop-filter:blur(16px) saturate(1.55);-webkit-backdrop-filter:blur(16px) saturate(1.55)}
+.j-node{grid-column:2;justify-self:center;position:relative;z-index:2;width:24px;height:24px;margin-top:26px;border-radius:50%;background:#fff;border:3px solid var(--accent);box-shadow:0 0 0 6px rgba(46,94,78,.12),0 6px 14px rgba(16,40,30,.18)}
+.j-shot{grid-column:3;border-radius:14px;overflow:hidden;align-self:start;margin-top:2px}
+.j-stop.flip .j-shot{grid-column:1;grid-row:1}
+.j-shot img{width:100%;height:auto}
+.j-shot figcaption{padding:9px 13px;font-size:12px;font-weight:700;letter-spacing:.03em;color:#3c4741;line-height:1.45}
+.j-note{max-width:640px;margin:28px auto 0;text-align:center;font-size:14px;line-height:1.65;color:#3c4741}
+/* AdSense earnings showcase — sits with the first-website stop */
+.j-ads{position:relative;z-index:1;margin-top:26px;border-radius:18px;padding:26px}
+.j-ads .kick{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.j-ads h3{font-family:'Fraunces',serif;font-size:clamp(22px,3vw,30px);font-weight:650;margin-top:7px}
+.j-ads>p{margin-top:9px;font-size:14.5px;line-height:1.65;color:#3c4741;max-width:68ch}
+.j-ads .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+.j-ads .stat{background:rgba(255,255,255,.6);border:1px solid var(--glass-brd);border-radius:14px;padding:16px}
+.j-ads .stat .num{font-family:'Fraunces',serif;font-size:clamp(20px,2.5vw,29px);font-weight:800;color:var(--accent);line-height:1.05}
+.j-ads .stat .lab{margin-top:6px;font-size:12px;font-weight:600;line-height:1.45;color:#3c4741}
+.j-ads .avg{margin-top:12px;font-size:13px;font-weight:600;color:#3c4741}
+.j-ads .avg b{color:var(--accent)}
+.j-ads figure{margin-top:16px;border-radius:14px;overflow:hidden;background:#fff;border:1px solid rgba(16,22,19,.12);box-shadow:0 14px 30px rgba(16,40,30,.10)}
+.j-ads figure img{width:100%;height:auto}
+.j-ads figcaption{padding:10px 14px;font-size:12.5px;font-weight:600;line-height:1.55;color:#3c4741}
+@media (max-width:820px){.j-ads{padding:20px}.j-ads .stats{grid-template-columns:1fr 1fr}}
+/* skill + tool brand marks */
+.skill-ic{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.75);border:1px solid var(--glass-brd);display:flex;align-items:center;justify-content:center;color:var(--accent);align-self:start}
+.skill-ic svg{width:23px;height:23px;display:block}
+.tool-chip{display:inline-flex;align-items:center;gap:9px;border-radius:999px;padding:7px 15px 7px 8px;font-size:13.5px;font-weight:700;background:rgba(255,255,255,.72);border:1px solid var(--glass-brd);color:#26332d;backdrop-filter:blur(16px) saturate(1.55);-webkit-backdrop-filter:blur(16px) saturate(1.55)}
+.tool-chip .lg{width:25px;height:25px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}
+.tool-chip .lg svg{width:17px;height:17px;display:block}
+.btn .bic{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.btn-wa{background:#25d366;color:#07381c}
+.btn-wa:hover{background:#1fbc59}
+.btn-wa .bic{width:25px;height:25px;border-radius:50%;background:#0b6e36}
+.btn-wa .bic svg{width:15px;height:15px;fill:#fff;display:block}
+.btn-li .bic svg{width:21px;height:21px;display:block}
+.wins{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:28px}
 .win{border-radius:18px;padding:22px}
 .win h3{font-family:'Fraunces',serif;font-size:20px}
 .win p{margin-top:7px;font-size:14px;line-height:1.6;color:#3c4741}
-.cta{margin-top:80px;border-radius:24px;padding:42px 30px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(207,238,224,.55))}
+.cta{margin-top:80px;border-radius:24px;padding:42px 30px;text-align:center;background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(207,238,224,.55));border:1px solid var(--glass-brd);backdrop-filter:blur(26px) saturate(1.55);-webkit-backdrop-filter:blur(26px) saturate(1.55)}
 .cta h2{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,50px);font-weight:650}
 .cta p{margin:12px auto 0;color:#3c4741;font-size:15.5px;max-width:52ch;line-height:1.6}
 .cta .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
@@ -239,10 +309,20 @@ body.busy .hint{visibility:hidden}
   .gal-arrow.prev{left:8px}.gal-arrow.next{right:8px}
   .gal-play{width:74px;height:74px;font-size:28px}
   .gal-cap{font-size:14px}
-  .t-row{grid-template-columns:1fr;gap:6px}
-  .skill-row{grid-template-columns:30px 1fr;padding:18px 2px}
-  .skill-row .lvl{grid-column:2;justify-self:start;margin-top:8px}
-  .skill-row p{grid-column:2}
+  .journey .rope{display:none}
+  .journey::before{content:"";position:absolute;left:15px;top:6px;bottom:6px;width:5px;border-radius:3px;z-index:0;background:repeating-linear-gradient(180deg,rgba(46,94,78,.6) 0 8px,rgba(17,64,44,.6) 8px 11px,rgba(46,94,78,.6) 11px 19px,transparent 19px 23px)}
+  .j-stop{grid-template-columns:34px 1fr;gap:0 14px;margin-top:22px}
+  .j-node{grid-column:1;width:20px;height:20px;margin-top:24px}
+  .j-card{grid-column:2;padding:19px}
+  .j-stop.flip .j-card{grid-column:2}
+  .j-shot,.j-stop.flip .j-shot{grid-column:2;grid-row:auto;margin-top:12px}
+  .j-note{text-align:left;margin-left:48px}
+  .skills-list{padding:2px 14px}
+  .skill-row{grid-template-columns:28px 38px 1fr;padding:18px 2px}
+  .skill-ic{width:36px;height:36px;border-radius:10px}
+  .skill-ic svg{width:20px;height:20px}
+  .skill-row .lvl{grid-column:3;justify-self:start;margin-top:8px}
+  .skill-row p{grid-column:3}
   .cta{padding:34px 20px}
 }
 @media (min-width:821px) and (max-width:1100px){
@@ -270,6 +350,21 @@ body.busy .hint{visibility:hidden}
   .door{min-height:150px;padding:28px 12px 18px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ================= JOURNEY — DESKTOP CLEAN GRID (≥821px only; the phone layout below 820px is untouched) =================
+   Every stop: story card and photo share one row height, every photo sits in the SAME 4:3 frame,
+   contained on a clean neutral mat — no cropping, no stretching, no ragged mixed heights. */
+@media (min-width:821px){
+  .journey{margin-top:46px}
+  .j-stop{align-items:stretch;margin-top:36px}
+  .j-card{display:flex;flex-direction:column;padding:26px 28px}
+  .j-card p,.j-card ul{margin-bottom:14px}
+  .j-card .res{margin-top:auto;align-self:flex-start}
+  .j-node{margin-top:37px}
+  .j-shot{display:flex;flex-direction:column;padding:12px;margin-top:0}
+  .j-shot img{flex:none;width:100%;aspect-ratio:4/3;object-fit:contain;background:#e9edea;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(16,22,19,.07)}
+  .j-shot figcaption{margin-top:auto;padding:13px 8px 3px;min-height:51px}
+}
 </style>
 </head>
 <body class="locked">
@@ -317,7 +412,7 @@ body.busy .hint{visibility:hidden}
   <div class="sheet" id="sheet" role="dialog" aria-label="Contact Devesh Nigam">
     <button class="x" id="sheetX" type="button" aria-label="Close">×</button>
     <h3>Devesh Nigam</h3><div class="sub">SOCIAL MEDIA // AI CREATOR</div>
-    <a href="tel:+918368864665"><span>PHONE</span><b>+91 8368864665</b></a>
+    <a href="https://wa.me/918368864665" target="_blank" rel="noopener"><span>WHATSAPP ONLY</span><b>+91 8368864665</b></a>
     <a href="mailto:devesh8270@gmail.com"><span>EMAIL</span><b>DEVESH8270@GMAIL.COM</b></a>
   </div>
 </div>
@@ -337,10 +432,10 @@ body.busy .hint{visibility:hidden}
 
     <section class="p-hero">
       <div>
-        <div class="p-kicker">Social Media · AI Content · Video</div>
+        <div class="p-kicker">Social Media · AI Content Creation</div>
         <h1>Hi, I'm Devesh.<br />I am a</h1>
         <div class="role-card"><span id="roleText">Social Media Manager</span></div>
-        <p class="p-lede">Hi, I'm Devesh Nigam — a Social Media Manager and AI Content Creator from Delhi. For 3+ years I've grown pages and built hyper-realistic AI influencers — including Caroline Langford, who reached 75.7K followers in her first month. I turn ideas into content people actually stop for.</p>
+        <p class="p-lede">I'm Devesh Nigam — a Delhi-based Social Media Manager and AI Content Creator with deep, advanced knowledge of AI content creation, AI image generation and AI video generation. I train AI models — fine-tuned until they look truly real — and build hyper-realistic AI influencers from scratch, including Caroline Langford, who won 75.7K followers in her very first month. For 3+ years I've also grown pages audiences can't scroll past. Bring me an idea; I'll bring you content that stops the scroll.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
           <a class="btn btn-solid" href="#g-caroline" data-scroll>See the work</a>
           <a class="btn btn-ghost" href="#contact" data-scroll>Discuss a project</a>
@@ -353,59 +448,184 @@ body.busy .hint{visibility:hidden}
     </section>
 
     <section class="proof" aria-label="Proof numbers">
-      <div class="cell glass"><div class="num">75.7K</div><div class="lab">followers in 1 month — Caroline, AI influencer</div></div>
+      <div class="cell glass"><div class="num">75.7K</div><div class="lab">followers in just 1 month — Caroline Langford, the AI influencer I built and run end to end</div></div>
       <div class="cell glass"><div class="num">573K</div><div class="lab">views in 30 days — The Family with Baby</div></div>
       <div class="cell glass"><div class="num">1.4M</div><div class="lab">views on one reel — Try New Things</div></div>
-      <div class="cell glass"><div class="num">₹2 lakh</div><div class="lab">first website sold — built at the start of the journey</div></div>
+      <div class="cell glass"><div class="num">₹9–10 lakh</div><div class="lab">total from my first website alone — US$7,686.43 AdSense + ₹2 lakh sale</div></div>
     </section>
 
     <section class="p-sec" id="skills">
       <div class="p-kicker">Skills &amp; Expertise</div>
       <h2>What I do</h2>
-      <p class="sub">Everything a page or brand needs to grow — created, edited and managed by one person, end to end.</p>
+      <p class="sub">One creator, the full growth stack — led by advanced AI content creation and social media growth, with strategy and posting handled end to end by the same person behind every result on this page.</p>
       <div class="skills-list">
-        <div class="skill-row"><span class="no">01</span><h3>AI Content Creation</h3><span class="lvl">Expert</span><p>Hyper-realistic AI video and photo generation, and AI influencers built end to end — face, wardrobe, locations, captions, posting rhythm. Proof: Caroline Langford, 75.7K followers in her first month.</p></div>
-        <div class="skill-row"><span class="no">02</span><h3>Social Media Management</h3><span class="lvl">Expert</span><p>Strategy, growth and scheduling for pages and brands. Proof: The Family with Baby — 573K views in 30 days, and a 1.4M-view reel on Try New Things.</p></div>
-        <div class="skill-row"><span class="no">03</span><h3>Prompt Engineering</h3><span class="lvl">Strong</span><p>Image and video prompts that hold a face, an outfit and a whole world consistent across an entire campaign — not just one lucky frame.</p></div>
-        <div class="skill-row"><span class="no">04</span><h3>Content Writing</h3><span class="lvl">Strong</span><p>Scripts, hooks, captions and ad copy written to make people stop scrolling — and stay.</p></div>
-        <div class="skill-row"><span class="no">05</span><h3>AI Tools &amp; Workflow</h3><span class="lvl">Advanced</span><p>A daily AI stack for generation and content — with ComfyUI at working-knowledge level for custom workflows.</p></div>
-        <div class="skill-row"><span class="no">06</span><h3>Client Dealing</h3><span class="lvl">Strong</span><p>Briefs, delivery and communication handled personally — the same person who makes the work answers your messages.</p></div>
+        <div class="skill-row"><span class="no">01</span><span class="skill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4.5 12.6 9l4.5 1.6-4.5 1.6L11 16.7l-1.6-4.5L4.9 10.6 9.4 9Z"/><path d="M18.6 15.2l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9Z"/><path d="M18.8 3.6l.5 1.4 1.4.5-1.4.5-.5 1.4-.5-1.4-1.4-.5 1.4-.5Z"/></svg></span><h3>AI Content Creation</h3><span class="lvl">Expert</span><p>Advanced, deep knowledge across AI content creation, AI image generation and AI video generation. I train AI-generated models — fine-tuned until they are hyper-realistic — and direct them end to end: face, wardrobe, world and posting rhythm. I created four AI models — Vaani Garg, Caroline Langford, Shrishti and Genie — and Caroline won 75.7K followers in her first month. That same AI craft powers The Last Ember, my AI film built shot by shot.</p></div>
+        <div class="skill-row"><span class="no">02</span><span class="skill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4v15.5h16"/><path d="M7.5 14.8 11 10.6l2.8 2.4 4.4-5.2"/><path d="M14.9 7.6h3.4v3.4"/></svg></span><h3>Social Media Management</h3><span class="lvl">Expert</span><p>Page growth run like a business and measured like one — strategy, content, scheduling and optimisation under one roof. Proof: The Family with Baby — 573K views in 30 days, and a 1.4M-view reel on Try New Things.</p></div>
+        <div class="skill-row"><span class="no">03</span><span class="skill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M7 9.3 10.2 12 7 14.7M12.8 15.2H17"/></svg></span><h3>Prompt Engineering</h3><span class="lvl">Strong</span><p>The prompting behind my AI image and video generation — prompts that do far more than produce one lucky frame: they hold a trained model's face, an outfit and an entire world consistent across a whole campaign.</p></div>
+        <div class="skill-row"><span class="no">04</span><span class="skill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 19.5 5.6 15 16.9 3.7a2.05 2.05 0 0 1 2.9 0l.5.5a2.05 2.05 0 0 1 0 2.9L9 18.4Z"/><path d="M14.8 5.8l3.4 3.4M3.5 21.5h17"/></svg></span><h3>Content Writing</h3><span class="lvl">Strong</span><p>Scripts, hooks, captions and ad copy with one job: stop the scroll, hold the attention, and move the reader to act.</p></div>
+        <div class="skill-row"><span class="no">05</span><span class="skill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="2"/><rect x="10" y="10" width="4" height="4" rx="1"/><path d="M9.5 6.5v-3M14.5 6.5v-3M9.5 20.5v-3M14.5 20.5v-3M6.5 9.5h-3M6.5 14.5h-3M20.5 9.5h-3M20.5 14.5h-3"/></svg></span><h3>AI Tools &amp; Workflow</h3><span class="lvl">Advanced</span><p>Advanced, daily command of the AI stack behind my image, video and content work — ChatGPT, Claude, Gemini, Google Flow with Veo 3 and Seedance — with ComfyUI at working-knowledge level for custom workflows.</p></div>
+        <div class="skill-row"><span class="no">06</span><span class="skill-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.3" r="3.3"/><path d="M3.4 19.8c.7-3.4 2.9-5.2 5.6-5.2s4.9 1.8 5.6 5.2"/><path d="M15.3 5.4a3.3 3.3 0 0 1 0 5.8M17.6 14.9c1.6.8 2.6 2.4 3 4.9"/></svg></span><h3>Client Dealing</h3><span class="lvl">Strong</span><p>No account managers, no hand-offs, nothing lost in translation. Briefs, delivery and day-to-day communication come straight from the person actually making your work.</p></div>
       </div>
-      <div class="tools-strip"><span class="tl">Tools I use</span><span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Gemini</span><span class="chip">Google Flow / Veo 3</span><span class="chip">Seedance</span><span class="chip">ComfyUI</span></div>
+      <div class="tools-strip"><span class="tl">Tools I use</span>
+        <span class="tool-chip"><span class="lg" style="background:#2b3245"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" aria-hidden="true"><path d="M7.2 7.2 10.5 10M16.8 7.2 13.5 10M12 13.6v3.2"/><circle cx="6" cy="6" r="2.3" fill="#fff" stroke="none"/><circle cx="18" cy="6" r="2.3" fill="#fff" stroke="none"/><circle cx="12" cy="11.8" r="2.3" fill="#fff" stroke="none"/><circle cx="12" cy="18.6" r="2.3" fill="#fff" stroke="none"/></svg></span>ComfyUI</span>
+      </div>
     </section>
 
     <section class="p-sec" id="services">
-      <h2>Magic happens behind the doors</h2>
-      <p class="sub">Two things I do for brands and pages. Tap a door to jump to that work's gallery.</p>
+      <h2>Where the results are made</h2>
+      <p class="sub">Three bodies of work, one person, zero hand-offs. Tap a door to jump straight to that work's gallery — and its numbers.</p>
       <div class="doors">
         <button class="door glass" type="button" data-target="#g-facebook"><span class="ic">◈</span><b>Social Media</b><small>Growth · Pages · Reels</small></button>
         <button class="door glass" type="button" data-target="#g-caroline"><span class="ic">✦</span><b>AI Content</b><small>Models · Influencers · Films</small></button>
+        <button class="door glass" type="button" data-target="#g-websites"><span class="ic">⬡</span><b>Websites</b><small>AdSense · Income</small></button>
       </div>
     </section>
 
     <div id="galleries"></div>
 
-<section class="p-sec" id="story">
-      <h2>Let's go back in time.</h2>
-      <div class="timeline">
-        <div class="t-row glass"><div class="yr">2021</div><div><h3>The first website</h3><p>Built my first website, got it earning with AdSense — and sold it for ₹2 lakh. That sale is what turned “trying things online” into a career.</p></div></div>
-        <div class="t-row glass"><div class="yr">2024</div><div><h3>Pages, clients &amp; a year at Maoyosoft</h3><p>Ran Hollywood-niche pages past 60K followers, and spent a year at Maoyosoft doing client work professionally.</p></div></div>
-        <div class="t-row glass"><div class="yr">2026</div><div><h3>The AI chapter</h3><p>Caroline Langford to 75.7K in a month, AI models for brands, and an AI film — The Last Ember — built shot by shot.</p></div></div>
+    <section class="p-sec" id="g-websites">
+      <div class="gal-head">
+        <div class="tagline">Websites · Google AdSense</div>
+        <h2>My Websites</h2>
+        <p class="sub">Before the models and the pages, there were websites — and they paid. I built and ran my own entertainment news sites from scratch. The AdSense screenshots below are shown big on purpose: every number, readable at a glance.</p>
+        <div class="stats"><span class="chip">First website — around ₹9–10 lakh total (AdSense + sale)</span><span class="chip">Second website — ₹40–70K / month at its run</span></div>
       </div>
+      <div class="web-grid">
+        <article class="web-card glass">
+          <div class="kick">First website · Entertainment news</div>
+          <h3>US$7,686.43 in year one</h3>
+          <p>June 2022 – May 2023 on Google AdSense: <b>US$7,686.43</b> in total estimated earnings, <b>10,527,067</b> impressions and <b>1,565,950</b> page views. Then I sold the website itself for ₹2 lakh. Add it together — the AdSense earnings plus the sale — and this one website made me <b>around ₹9–10 lakh</b> in total. The payments screenshot shows monthly ending balances left after each payout — not extra earnings on top.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><span class="chip">AdSense all-time — US$7,686.43</span><span class="chip">Website sale — ₹2 lakh</span><span class="chip">Combined — around ₹9–10 lakh</span></div>
+          <div class="web-shots">
+            <figure><img src="assets/asset-088.jpg" alt="First website — Google AdSense Reports, June 2022 to May 2023, total estimated earnings US$7,686.43" loading="lazy" /><figcaption>Reports — US$7,686.43 total, Jun 2022 – May 2023</figcaption></figure>
+            <figure><img src="assets/asset-089.jpg" alt="First website — Google AdSense Payments, monthly ending balances January to June 2023" loading="lazy" /><figcaption>Payments — monthly ending balances, Jan – Jun 2023</figcaption></figure>
+          </div>
+        </article>
+        <article class="web-card glass">
+          <div class="kick">Second website · Same niche</div>
+          <h3>US$1.73K in about two months</h3>
+          <p>12 Sept – 28 Oct 2023: <b>US$1.73K</b> revenue from <b>1.06M</b> impressions, at an eCPM of <b>US$1.63</b>. This second website ran for a year, earning around ₹40–70K a month — the repeat performance that proved the first success was a system, not luck.</p>
+          <div class="web-shots">
+            <figure><img src="assets/asset-090.jpg" alt="Second website — AdSense overview, 12 September to 28 October 2023: US$1.73K revenue, 1.06M impressions, eCPM US$1.63" loading="lazy" /><figcaption>Overview — US$1.73K revenue, 1.06M impressions</figcaption></figure>
+          </div>
+        </article>
+      </div>
+    </section>
+
+<section class="p-sec" id="story">
+      <div class="p-kicker">The Journey</div>
+      <h2>Let's go back in time.</h2>
+      <p class="sub">Five years. One thread. Every chapter below happened in this order — small wins first, then the kind of results reviewers remember. Follow the rope: nothing here was overnight, and nothing here is exaggerated.</p>
+      <div class="journey">
+        <svg class="rope" viewBox="0 0 44 1000" preserveAspectRatio="none" aria-hidden="true"><path d="M22,-10 L22,1010" fill="none" stroke="#2e5e4e" stroke-width="5" stroke-linecap="round" opacity=".4"/><path d="M22,-10 L22,1010" fill="none" stroke="#11402c" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 11" opacity=".45"/></svg>
+
+        <div class="j-stop">
+          <article class="j-card glass">
+            <div class="yr">2021</div>
+            <h3>Where it all started — the first website</h3>
+            <p>It began with one question: can the internet actually pay? I built my first entertainment news website from scratch, learned how content ranks and how AdSense rewards it, and got it approved and earning. It ran for a year and a half, earning US$7,686.43 in AdSense revenue along the way — and then I sold it, for ₹2 lakh. Put together, that one website made me around ₹9–10 lakh in total. That first win changed everything: “trying things online” became a career plan.</p>
+            <ul>
+              <li>First entertainment news website — built from scratch and approved on AdSense</li>
+              <li>Ran for 1.5 years, earning ₹40–60K a month</li>
+              <li>All-time AdSense revenue of US$7,686.43 — then sold the website for ₹2 lakh</li>
+              <li>Combined income from this one website: around ₹9–10 lakh</li>
+            </ul>
+            <span class="res">Result: around ₹9–10 lakh — AdSense + website sale</span>
+          </article>
+          <div class="j-node" aria-hidden="true"></div>
+          <figure class="j-shot glass">
+            <img src="assets/asset-088.jpg" alt="First website — Google AdSense Reports, June 2022 to May 2023, total estimated earnings US$7,686.43" loading="lazy" />
+            <figcaption>First website — its AdSense reports (full-size screenshots in My Websites above)</figcaption>
+          </figure>
+        </div>
+
+        <div class="j-stop flip">
+          <article class="j-card glass">
+            <div class="yr">2022 – 24</div>
+            <h3>The second website — proof it wasn't luck</h3>
+            <p>A result you can repeat is a skill — so I repeated it: a second website in the same entertainment news niche. It ran for a year and earned even better than the first — until 2024, when its AdSense account was closed and I lost the last month's income with it. A hard lesson, learned early: never build everything on one platform.</p>
+            <ul>
+              <li>Second entertainment news website — ran for 1 year</li>
+              <li>Earned ₹40–70K a month at its run</li>
+              <li>AdSense closed in 2024 — the last month's income was lost</li>
+            </ul>
+            <span class="res">Result: ₹40–70K a month</span>
+          </article>
+          <div class="j-node" aria-hidden="true"></div>
+          <figure class="j-shot glass">
+            <img src="assets/asset-090.jpg" alt="Second website — AdSense overview, 12 September to 28 October 2023: US$1.73K revenue, 1.06M impressions, eCPM US$1.63" loading="lazy" />
+            <figcaption>Second website — AdSense overview: US$1.73K in about two months (full-size screenshot in My Websites above)</figcaption>
+          </figure>
+        </div>
+
+        <div class="j-stop">
+          <article class="j-card glass">
+            <div class="yr">2024</div>
+            <h3>The tough year — and the pivot that paid off</h3>
+            <p>2024 is when the tough time started: the websites were gone, and I had to rebuild from zero. I pivoted to Hollywood celebrity news Facebook pages — and they took off with a USA audience. The pages were monetised, though Facebook's pay was low. What wasn't low was the lesson: how to build an audience from nothing — the skill everything after this runs on.</p>
+            <ul>
+              <li>Pivoted to Hollywood celebrity news Facebook pages</li>
+              <li>2–3 pages crossed 60K+ followers, with a USA audience</li>
+              <li>Pages monetised — but Facebook's pay stayed low</li>
+            </ul>
+            <span class="res">Result: pages past 60K followers</span>
+          </article>
+          <div class="j-node" aria-hidden="true"></div>
+        </div>
+
+        <div class="j-stop flip">
+          <article class="j-card glass">
+            <div class="yr">2026</div>
+            <h3>The AI turn — models, a film &amp; a hard reset</h3>
+            <p>Everything learned so far — pages and growth — converged when I turned to AI, and I went deep: advanced AI content creation, AI image generation and AI video generation, and prompt engineering. I train AI models — fine-tuned until they are hyper-realistic — and created Caroline Langford, a hyper-realistic AI influencer, and ran her end to end. She exploded — then the account was disabled and every Facebook page was demonetised. I kept building anyway. The account was never the asset; the skill is.</p>
+            <ul>
+              <li>Deep knowledge of AI image/video generation + prompt engineering</li>
+              <li>Trained AI models — AI-generated models, fine-tuned and hyper-realistic</li>
+              <li>Caroline Langford — 75.7K followers in 1 month</li>
+              <li>Account disabled; all Facebook pages demonetised</li>
+              <li>Created 4 AI models for THE UNREAL HUMAN</li>
+              <li>The Last Ember — an AI film project, built shot by shot</li>
+              <li>deveshnigam.tech — this portfolio — launched</li>
+            </ul>
+            <span class="res">Result: 75.7K followers in one month</span>
+          </article>
+          <div class="j-node" aria-hidden="true"></div>
+          <figure class="j-shot glass">
+            <img src="assets/asset-077.jpg" alt="Caroline Langford's growth proof — 75.7K followers in her first month, contact details blurred" loading="lazy" />
+            <figcaption>Caroline Langford — 75.7K followers in her first month (contact details blurred)</figcaption>
+          </figure>
+        </div>
+
+        <div class="j-stop">
+          <article class="j-card glass">
+            <div class="yr">2026 →</div>
+            <h3>Now — one creator, the full stack</h3>
+            <p>Today I bring all of it to brands and clients as one person — with deep, advanced expertise in AI content creation and social media growth, backed by everything this journey taught me. The rope doesn't end here — the next stop is a full-time role in social media or AI content creation, where this whole journey points in one direction.</p>
+            <span class="res">Open to: Social Media · AI Content Creation roles</span>
+          </article>
+          <div class="j-node" aria-hidden="true"></div>
+          <figure class="j-shot glass">
+            <img src="assets/asset-096.jpg" alt="The Last Ember — world and location design sheets from the AI film" loading="lazy" />
+            <figcaption>The Last Ember — the AI film's world, designed shot by shot</figcaption>
+          </figure>
+        </div>
+      </div>
+      <p class="j-note">Every number on this page traces straight back to the work itself — the screenshots in this journey are the same results you'll find in the galleries above. Nothing rounded up. Nothing borrowed.</p>
       <div class="wins">
-        <div class="win glass"><h3>The second website</h3><p>A second site that earned ₹40–70K a month at its run — proof the first one wasn't luck.</p></div>
-        <div class="win glass"><h3>Freelancing</h3><p>Ongoing freelance reels and pages for clients — the work that connects every chapter above.</p></div>
+        <div class="win glass"><h3>Repeat success</h3><p>A second website that earned ₹40–70K a month at its run — because a result you can repeat is a skill, not luck.</p></div>
+        <div class="win glass"><h3>Freelancing, ongoing</h3><p>Freelance reels and pages for clients — the thread that connects every chapter above, still running today.</p></div>
       </div>
     </section>
 
     <section class="cta glass" id="contact">
-      <h2>Got a role? Let's talk.</h2>
-      <p>Social media or AI content — one message is enough to start. I reply personally.</p>
+      <h2>Let's build your growth story.</h2>
+      <p>Open to Social Media and AI Content Creation roles. If you need one person who can create advanced AI content — images, video and models trained to look real — and grow it on social media, this page has already shown you the proof. One message is enough to start, and I reply personally.</p>
       <div class="row">
-        <a class="btn btn-solid" href="tel:+918368864665">Call +91 83688 64665</a>
+        <a class="btn btn-wa" href="https://wa.me/918368864665" target="_blank" rel="noopener"><span class="bic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg></span>+91 83688 64665 · WhatsApp only</a>
         <a class="btn btn-ghost" href="mailto:devesh8270@gmail.com">devesh8270@gmail.com</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/devesh-nigam-384a41194" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn-ghost btn-li" href="https://www.linkedin.com/in/devesh-nigam-384a41194" target="_blank" rel="noopener"><span class="bic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#0a66c2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></span>LinkedIn</a>
       </div>
+      <p style="margin-top:16px;font-size:13px;font-weight:600;color:#5a665f">I don't take calls — please message me on WhatsApp.</p>
     </section>
     <div class="p-foot">DEVESH NIGAM · SOCIAL MEDIA // AI CREATOR · DELHI</div>
   </div>
@@ -457,10 +677,14 @@ function pose(m){
     s = Math.min(W/460, 0.75*H/720); x = W/2 - 637*s; y = H - 715*s;
     return {x:x, y:y, s:s};
   }
-  s = Math.max(W/1280, H/720);
+  /* HEAD-TO-WAIST framing: the scale is capped by H/700 and the frame is bottom-anchored at frame
+     y 712, so the visible window always spans ~700 frame px — head through waist —
+     on every desktop aspect.
+     On aspects wider than ~1.83 the frame no longer covers the full width; the wall backdrop and
+     the plate's feathered side fade (--ms) melt the edges into the stage. */
+  s = Math.min(W/1280, H/700);
   x = (W - 1280*s)/2;
-  /* cap the top crop at 10 frame px so the wordmark tops and his head (top at y 70) are never cropped */
-  y = Math.min(0, Math.max(H - 720*s, -10*s));
+  y = H - 712*s;
   return {x:x, y:y, s:s};
 }
 function fitHero(p){
@@ -536,11 +760,51 @@ function entrance(){
 var plateReady = new Promise(function(res){ if(plate.complete) res(); else{ plate.addEventListener('load', res); plate.addEventListener('error', res); } });
 Promise.race([Promise.all([document.fonts.ready, plateReady]), wait(2500)]).then(function(){ requestAnimationFrame(entrance); });
 setTimeout(entrance, 4000);
-$('#badgeHit').addEventListener('pointerenter', function(){
+/* ID card swing — a BIG, clearly visible left-to-right pendulum (see @keyframes swingBig:
+   -24deg -> +20deg -> -15deg -> +10deg -> -6deg -> +3deg -> rest, 3s). It REPLACES the gentle
+   idle sway while it runs (class .swinging, animation ... !important), so it cannot be hidden
+   underneath the sway the way the old composite:'add' WAAPI swing was. Triggers reliably on
+   every desktop hover (pointerenter / mouseenter / pointermove across the card) and on every
+   mobile tap; retriggering restarts it from the top. */
+var swingStartedAt = 0;
+function triggerSwing(){
   if(mode !== 'hero' || RM) return;
-  badge.animate([{transform:'rotate(0deg)'},{transform:'rotate(-6deg)'},{transform:'rotate(4deg)'},{transform:'rotate(-2deg)'},{transform:'rotate(0deg)'}],{duration:1400,easing:'ease-out',composite:'add'});
+  var now = Date.now();
+  if(now - swingStartedAt < 350) return; /* ignore the enter+move double-fire of one hover */
+  swingStartedAt = now;
+  animBadgeEls().forEach(function(el){
+    el.classList.remove('swinging');
+    void el.offsetWidth; /* restart the keyframes from 0deg */
+    el.classList.add('swinging');
+  });
+}
+animBadgeEls().forEach(function(el){
+  el.addEventListener('animationend', function(e){
+    if(e.animationName === 'swingBig') el.classList.remove('swinging');
+  });
 });
-$('#badgeHit').addEventListener('click', function(){ if(mode === 'hero') sheet.classList.toggle('open'); });
+var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+var lastHX = null, lastHT = 0;
+$('#badgeHit').addEventListener('pointerenter', function(e){
+  if(!finePointer.matches) return;
+  lastHX = e.clientX; lastHT = Date.now();
+  triggerSwing();
+});
+$('#badgeHit').addEventListener('mouseenter', function(){
+  if(!finePointer.matches) return;
+  triggerSwing();
+});
+$('#badgeHit').addEventListener('pointermove', function(e){
+  if(!finePointer.matches || mode !== 'hero' || RM) return;
+  var now = Date.now();
+  if(lastHX === null){ lastHX = e.clientX; lastHT = now; return; }
+  var dx = e.clientX - lastHX, dt = Math.max(16, now - lastHT);
+  lastHX = e.clientX; lastHT = now;
+  /* moving across the card re-pumps the swing, but at most once per second */
+  if(Math.abs(dx) > 22 && now - swingStartedAt > 1000) triggerSwing();
+});
+$('#badgeHit').addEventListener('pointerleave', function(){ lastHX = null; });
+$('#badgeHit').addEventListener('click', function(){ triggerSwing(); if(mode === 'hero') sheet.classList.toggle('open'); });
 /* mobile ID card: drag it sideways and it swings; tap it and the contacts open */
 (function(){
   var drag = null;
@@ -559,13 +823,30 @@ $('#badgeHit').addEventListener('click', function(){ if(mode === 'hero') sheet.c
   function endDrag(){
     if(!drag) return;
     var tap = !drag.moved; drag = null;
+    if(tap){
+      /* tap = swing BIG (left-to-right pendulum) AND open the contacts, together */
+      mBadge.style.transition = ''; mBadge.style.transform = ''; mBadge.style.animation = '';
+      if(mode === 'hero'){ triggerSwing(); sheet.classList.toggle('open'); }
+      return;
+    }
     mBadge.style.transition = 'transform .55s cubic-bezier(.2,.8,.2,1)';
     mBadge.style.transform = '';
     setTimeout(function(){ mBadge.style.transition = ''; mBadge.style.animation = ''; }, 580);
-    if(tap && mode === 'hero') sheet.classList.toggle('open');
   }
   mBadge.addEventListener('pointerup', endDrag);
   mBadge.addEventListener('pointercancel', endDrag);
+  /* click backstop: some tap pipelines deliver a click without pointer events. A real tap
+     fires pointerup first (handled above), so ignore the click that follows it within 600ms
+     — otherwise the sheet would toggle twice and the swing would restart pointlessly. */
+  var lastPointerTap = 0;
+  mBadge.addEventListener('pointerup', function(){ lastPointerTap = Date.now(); });
+  mBadge.addEventListener('click', function(){
+    if(Date.now() - lastPointerTap < 600) return;
+    if(mode !== 'hero') return;
+    mBadge.style.animation = '';
+    triggerSwing();
+    sheet.classList.toggle('open');
+  });
 })();
 
 function clearAnims(el){ el.getAnimations().forEach(function(a){ try{ a.cancel(); }catch(e){} }); }
@@ -749,8 +1030,12 @@ function V(src, poster, cap){ return {t:'v', src:src, poster:poster, cap:cap}; }
 function I(src, cap){ return {t:'i', src:src, cap:cap}; }
 var GALLERIES = [
 { id:'g-caroline', tag:'AI Influencer · Instagram', title:'Caroline Langford',
-  desc:'My first AI model — an influencer built and run end to end: face, wardrobe, locations, captions and posting rhythm. Every photo and video of her work, in one place — use the side arrows to go through all of it.',
-  stats:['75.7K followers / 1 month','Millions of views','17 photos · 3 videos'],
+  desc:'Meet the influencer who doesn\u2019t exist — and the audience that keeps growing anyway. Caroline is an AI model I created and trained — fine-tuned to stay hyper-realistic and consistent — and run end to end: face, wardrobe, locations, captions and posting rhythm. Browse every photo and video in the slider — her real Instagram numbers are showcased right below it.',
+  stats:['75.7K followers / 1 month','Fashion · Beauty','17 photos · 3 videos'],
+  feature:{ img:'assets/asset-077.jpg', alt:'Caroline Langford on Instagram — @shycarolinehere: 93 posts, 75.7K followers, 98 following',
+    kick:'The result — her Instagram', big:'75.7K', title:'followers in her first month',
+    text:'Not a mockup. Not a projection. This is her actual Instagram profile — @shycarolinehere — the account I built and run for her: 93 posts in, 75.7K followers, in month one alone. The account itself, screenshotted.',
+    chips:['@shycarolinehere','93 posts','Month one'] },
   items:[
     I('assets/asset-007.jpg','Caroline Langford — studio portrait, sequin butterfly top'),
     V('assets/asset-003.mp4','assets/asset-008.jpg','Fashion-show walk — video'),
@@ -774,41 +1059,46 @@ var GALLERIES = [
     I('assets/asset-026.jpg','Rose garden — rust top')
   ]},
 { id:'g-vaani', tag:'AI Model · Brand Work', title:'Vaani Garg',
-  desc:'An AI model created for brand work — jewellery, beauty, saree and editorial shoots, delivered as photo and video campaigns. Her full WORK gallery plus her 360° turn.',
-  stats:['15 brand shoots','Photo + video','360° turn'],
+  desc:'A virtual model with a very real portfolio. Vaani was created for brand work — jewellery, beauty, saree and editorial campaigns — delivered as polished photo and video shoots. Explore her full WORK gallery, plus her 360° turn.',
+  stats:['16 photos · 6 videos','15 brand shoots','360° turn'],
   items:[
     I('assets/asset-027.jpg','Vaani Garg — studio headshot, red top'),
+    V('assets/asset-078.mp4','assets/asset-079.jpg','Work video — embroidered halter top & palazzo, outdoor'),
     V('assets/asset-006.mp4','assets/asset-028.jpg','Vaani — 360° turn video'),
     I('assets/asset-029.jpg','Yunjac cream — product in hand'),
     I('assets/asset-030.jpg','Yunjac cream — application shot'),
+    V('assets/asset-080.mp4','assets/asset-081.jpg','Work video — skincare serum UGC'),
     I('assets/asset-031.jpg','Dior lipstick — beauty shot'),
     I('assets/asset-032.jpg','Hazoorilal — jewellery campaign'),
     I('assets/asset-033.jpg','Kalyan Jewellers — campaign'),
+    V('assets/asset-082.mp4','assets/asset-083.jpg','Work video — red kurta, clothing store'),
     I('assets/asset-034.jpg','Party lehenga — collage'),
     I('assets/asset-035.jpg','Party-wear saree'),
     I('assets/asset-036.jpg','Ethnos — royal blue saree'),
+    V('assets/asset-084.mp4','assets/asset-085.jpg','Work video — embroidered outfit, in-store shoot'),
     I('assets/asset-037.jpg','Khush Magazine — cover'),
     I('assets/asset-038.jpg','Elegance — pink saree'),
     I('assets/asset-039.jpg','Pink lehenga — close-up'),
+    V('assets/asset-086.mp4','assets/asset-087.jpg','Work video — red saree, clothing store'),
     I('assets/asset-040.jpg','Von Dutch — airport look'),
     I('assets/asset-041.jpg','Von Dutch — vending shoot'),
     I('assets/asset-042.jpg','Von Dutch — vending, side look'),
     I('assets/asset-043.jpg','Variety — interview shoot')
   ]},
 { id:'g-genie', tag:'AI Model · AI-Generated', title:'Genie',
-  desc:'An AI-generated model created by me — hyper-realistic studio portraiture, styled and directed end to end. Her gallery starts here; more of her shoots will be added as they are made.',
+  desc:'An AI-generated model created, styled and directed by me end to end — hyper-realistic studio portraiture with a signature look. Her gallery starts here, and grows with every new shoot.',
   stats:['Height 5\u20325\u2033','Age 21','Female','Indian · Based in India'],
   items:[
     I('assets/asset-044.jpg','Genie — studio portrait, black sequin look')
   ]},
 { id:'g-shrishti', tag:'AI Model · AI-Generated', title:'Shrishti',
-  desc:'An AI-generated model created by me — hyper-realistic studio portraiture, styled and directed end to end. Her gallery starts here; more of her shoots will be added as they are made.',
+  desc:'Created, styled and directed by me from the first prompt to the final frame — hyper-realistic portraiture in a classic Indian traditional look. Her gallery opens here; new shoots join it as they are made.',
   stats:['Height 5\u20322\u2033','Age 27','Female','Indian · Based in India'],
   items:[
     I('assets/asset-045.jpg','Shrishti — studio portrait, cream & pink traditional look')
   ]},
 { id:'g-ember', tag:'AI Film · World & Character Design', title:'The Last Ember',
-  desc:'An AI movie built shot by shot — character sheets, locations, equipment and a fire drake, held consistent across the whole world. Watch the snow-scene clip, then flip through the design sheets.',
+  desc:'A film that exists because one creator refused to wait for a crew. The Last Ember is an AI movie built shot by shot — character sheets, locations, equipment and a fire drake, all held consistent across one world. Watch the snow-scene clip, then step inside the design sheets.',
   stats:['Character design','Full world building','2026'],
   items:[
     V('assets/asset-007.mp4','assets/asset-046.jpg','The Last Ember — snow-scene clip'),
@@ -829,7 +1119,7 @@ var GALLERIES = [
     I('assets/asset-060.jpg','Continuity sheet — holding the world together')
   ]},
 { id:'g-facebook', tag:'Social Media · Facebook Pages', title:'Facebook Pages — US Audience',
-  desc:'Reels produced for family-niche Facebook pages, plus growth on my own profile. The result screenshots, page by page.',
+  desc:'Family-niche Facebook pages run for a US audience — reels produced by me — plus growth on my own profile. The numbers, page by page, in the screenshots inside.',
   stats:['573K views / 30 days','1.4M-view reel','30K personal followers'],
   items:[
     I('assets/asset-091.jpg','The Family with Baby — 573K views in 30 days'),
@@ -843,7 +1133,7 @@ var galMount = $('#galleries'), galObjs = [], activeGal = null;
 function buildGalleries(){
   var intro = document.createElement('section');
   intro.className = 'p-sec'; intro.id = 'work';
-  intro.innerHTML = '<h2>The work — all of it, one slider at a time</h2><p class="sub">Every project below is a slider: use the <b>‹ ›</b> side buttons (or swipe) to go through all its photos and videos in one go. Scroll down for the next work. Videos play on their own — tap one to pause, tap the speaker for sound.</p>';
+  intro.innerHTML = '<h2>The proof — project by project</h2><p class="sub">This is the actual work, one slider at a time: use the <b>‹ ›</b> side buttons (or swipe) to go through every photo and video. Videos play on their own — tap one to pause, tap the speaker for sound.</p>';
   galMount.appendChild(intro);
   GALLERIES.forEach(function(g){
     var sec = document.createElement('section');
@@ -867,6 +1157,20 @@ function buildGalleries(){
     var meta = document.createElement('div'); meta.className = 'gal-meta';
     meta.innerHTML = '<span class="gal-cap"></span><span class="gal-count"></span>';
     sec.appendChild(meta);
+    if(g.feature){
+      var ft = document.createElement('div'); ft.className = 'gal-feature glass';
+      var fshot = document.createElement('div'); fshot.className = 'shot';
+      var fimg = document.createElement('img'); fimg.src = g.feature.img; fimg.alt = g.feature.alt; fimg.loading = 'lazy';
+      fshot.appendChild(fimg); ft.appendChild(fshot);
+      var ftx = document.createElement('div');
+      var fk = document.createElement('div'); fk.className = 'kick'; fk.textContent = g.feature.kick; ftx.appendChild(fk);
+      var fb = document.createElement('div'); fb.className = 'big'; fb.textContent = g.feature.big; ftx.appendChild(fb);
+      var fh = document.createElement('h3'); fh.textContent = g.feature.title; ftx.appendChild(fh);
+      var fp = document.createElement('p'); fp.textContent = g.feature.text; ftx.appendChild(fp);
+      var fm = document.createElement('div'); fm.className = 'mini';
+      g.feature.chips.forEach(function(x){ var c = document.createElement('span'); c.className = 'chip'; c.textContent = x; fm.appendChild(c); });
+      ftx.appendChild(fm); ft.appendChild(ftx); sec.appendChild(ft);
+    }
     galMount.appendChild(sec);
     var obj = { g:g, sec:sec, stage:stage, img:stage.querySelector('img'), vid:stage.querySelector('video'),
       cap:meta.querySelector('.gal-cap'), count:meta.querySelector('.gal-count'),
