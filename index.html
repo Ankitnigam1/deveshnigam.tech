@@ -34,12 +34,12 @@ img,video{display:block;max-width:100%}
 .js .pre{opacity:0!important}
 
 /* ================= HERO STAGE ================= */
-.stage{position:fixed;inset:0;overflow:hidden;background:#ffffff;z-index:1}
-.stage::before{content:"";position:absolute;inset:0;opacity:0;pointer-events:none;background:#ffffff}
+.stage{position:fixed;inset:0;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#f0eef0 55%,#e6e4e7 100%);z-index:1}
+.stage::before{content:"";position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(180deg,#fbfafb 0%,#f0eef0 55%,#e2e0e3 100%)}
 /* ambient backdrop: a soft wall-only wash sampled from the photo's own office wall fills the whole stage,
    so wherever the photo ends it melts into the same wall tones — no foreign flat band, no visible rectangle edge,
    and no subject colours in the fill (the textures are pre-blurred crops of empty wall from each photo) */
-.backdrop{position:absolute;inset:0;z-index:0;overflow:hidden;background:#ffffff}
+.backdrop{position:absolute;inset:0;z-index:0;overflow:hidden;background:#ebe9ec}
 .bd{position:absolute;inset:0;background-size:cover;background-position:50% 50%;transition:opacity .8s ease}
 .bd-plate{background-image:url(assets/asset-001.jpg);opacity:1}
 .bd-case{background-image:url(assets/asset-002.jpg);opacity:0}
@@ -274,7 +274,7 @@ body.busy .hint{visibility:hidden}
 
 @media (max-width:820px){
   :root{--n:calc(100vw/430)}
-  .stage{background:#ffffff}
+  .stage{background:#f0eef0}
   .stage::before{transition:opacity 1.6s}
   .stage.m-case::before{opacity:1}
   .frame.m-fade{--mt:64px;--ms:56px}
