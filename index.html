@@ -699,10 +699,14 @@ function pose(m){
     /* fit the WHOLE laptop (frame rect x 178..1110, y 54..666) inside the viewport — same math on phone, tablet and PC.
        The case box is VERTICALLY CENTRED on every viewport, mobile included: the earlier mobile
        top-pin (y:12) pushed the whole video up to the top of the phone, which looked wrong.
-       Centred, the box sits in the middle of the screen with white headroom above it, and the
-       dive's footage keeps his hair in frame until ~3.5s in (head-top y 64 -> 11 by 2.5s) while
-       the mobile 1.15x rate cap hides the video at ~2.6s of video time — so the hair is never
-       clipped during the dive. */
+       Centred, the box sits in the middle of the screen with white headroom above it. The hair
+       stays visible at the reference dive rate too (verified 2026-11-19: head screen-y 362 -> 304
+       on a 390px phone, never near the viewport top; the person leaves the frame at ~3.0s of
+       video time as the camera dives into the screen — the same footage structure as the
+       reference portfolio). The old mobile 1.15x rate cap was removed 2026-11-19: it was designed
+       for the old y:12 top-pin pose, and with the centred pose it only made the dive crawl — leg 1
+       timed out at 46% of the video, so the laptop screen never emerged from the video before
+       the portfolio opened. */
     s = Math.min(W/932, H/612) * 0.98;
     return {x:W/2 - 644*s, y:H/2 - 360*s, s:s};
   }
@@ -910,13 +914,7 @@ function playTrans(){
       if(done) return;
       var d = trans.duration || 5.96, p = d ? trans.currentTime/d : 1;
       if(p >= 0.995){ finish(); return; }
-      /* MOBILE: cap the dive at ~1.15x. The video races to 4.2x on desktop, so it reaches the
-         head-cutting part (~2s in) in ~0.7s of wall time — mid-glide, while the frame is still
-         travelling. At ~1.15x the hair is still just visible at the top edge when leg 2 hides
-         the video (2.3s). Desktop rate untouched. */
-      var rate = Math.max(1.2, 1.8 + 2.4*Math.sin(Math.PI*Math.min(p*1.08, 1)));
-      if(isMobile()) rate = 1.15;
-      try{ trans.playbackRate = rate; }catch(e){}
+      try{ trans.playbackRate = Math.max(1.2, 1.8 + 2.4*Math.sin(Math.PI*Math.min(p*1.08, 1))); }catch(e){}
       requestAnimationFrame(tick);
     }
     var pr = trans.play();
