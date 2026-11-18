@@ -59,7 +59,7 @@ img,video{display:block;max-width:100%}
 .script{position:absolute;top:138px;left:70px;z-index:6;white-space:nowrap;font-family:'Caveat Brush',cursive;font-size:64px;line-height:1;color:#11402c;letter-spacing:-.5px;transform:rotate(-8deg);transform-origin:0 50%;text-shadow:0 0 6px #fff,0 0 14px #fff,0 0 22px rgba(255,255,255,.9),0 2px 14px rgba(255,255,255,.65)}
 .trans{position:absolute;inset:0;width:1280px;height:720px;object-fit:cover;opacity:0;z-index:6;--o:0px;--ob:0px}
 .caseplate{position:absolute;left:0;top:0;width:1280px;height:720px;object-fit:cover;opacity:0;z-index:7;--o:0px;--ob:0px}
-.screen{position:absolute;left:285px;top:91px;width:711px;height:439px;z-index:8;border-radius:3px;background:#fff;overflow:hidden;opacity:0}
+.screen{position:absolute;left:273px;top:82px;width:740px;height:443px;z-index:8;border-radius:3px;background:#fff;overflow:hidden;opacity:0}
 .screen .swhite{position:absolute;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--accent)}
 .screen .swhite .a{font-family:'Fraunces',serif;font-weight:800;font-size:44px;letter-spacing:.02em;color:#101613}
 .screen .swhite .b{font-family:'Archivo',sans-serif;font-size:15px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--accent)}
@@ -691,27 +691,26 @@ function setN(){ var n = isMobile() ? W/430 : Math.min(W/1440, H/900); root.styl
 function pose(m){
   var s, x, y;
   if(m === 'fill'){
-    /* the laptop screen rect (285,91 · 711x439 in the 1280x720 frame) grows until it covers the whole viewport */
-    s = Math.max(W/711, H/439) * 1.04;
-    return {x:W/2 - 640*s, y:H/2 - 310*s, s:s};
+    /* the laptop screen rect (273,82 · 740x443 in the 1280x720 frame) grows until it covers the whole viewport */
+    s = Math.max(W/740, H/443) * 1.04;
+    return {x:W/2 - 643*s, y:H/2 - 303*s, s:s};
   }
   if(m === 'case'){
-    /* fit the WHOLE laptop (frame rect x 180..1101, y 66..665) inside the viewport — same math on phone, tablet and PC */
-    s = Math.min(W/921, H/599) * 0.98;
-    /* MOBILE: pin the frame near the TOP of the viewport (12px down, so the video box still
-       reads as a full-bleed card). On a phone the case box sits mid-screen, so the dive's own
-       footage — the camera pushes Devesh's head out of the top of the 720px frame from ~2s
-       in — slices his hair across the middle of the screen. Pinned to the top, the hair can
-       only leave through the viewport's top edge, and the 12px offset keeps it visibly clear
-       of that edge (≥12px) until leg 2 hides the video; the whole laptop still fits the
-       width. Desktop keeps the centred pose. */
-    if(isMobile()) return {x:W/2 - 640*s, y:12, s:s};
-    return {x:W/2 - 640*s, y:H/2 - 365*s, s:s};
+    /* fit the WHOLE laptop (frame rect x 178..1110, y 54..666) inside the viewport — same math on phone, tablet and PC.
+       The case box is VERTICALLY CENTRED on every viewport, mobile included: the earlier mobile
+       top-pin (y:12) pushed the whole video up to the top of the phone, which looked wrong.
+       Centred, the box sits in the middle of the screen with white headroom above it, and the
+       dive's footage keeps his hair in frame until ~3.5s in (head-top y 64 -> 11 by 2.5s) while
+       the mobile 1.15x rate cap hides the video at ~2.6s of video time — so the hair is never
+       clipped during the dive. */
+    s = Math.min(W/932, H/612) * 0.98;
+    return {x:W/2 - 644*s, y:H/2 - 360*s, s:s};
   }
   if(isMobile()){
-    /* person bbox x 419..854, centre 637 — centre him, frame bottom sits at the viewport bottom.
-       Devesh is narrower in frame, so frame on W/460 to keep his face just as big, and the laptop he holds stays mostly in frame. */
-    s = Math.min(W/460, 0.75*H/720); x = W/2 - 637*s; y = H - 715*s;
+    /* person bbox x 394..896, centre 645 — centre him, frame bottom sits at the viewport bottom.
+       He is wider in the new video's frame (502 vs 435 px), so frame on W/531 to keep his face
+       the same size as before, and the laptop he holds stays mostly in frame. */
+    s = Math.min(W/531, 0.75*H/720); x = W/2 - 645*s; y = H - 715*s;
     return {x:x, y:y, s:s};
   }
   /* HEAD-TO-WAIST framing: the scale is capped by H/700 and the frame is bottom-anchored at frame
